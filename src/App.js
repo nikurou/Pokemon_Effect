@@ -1,23 +1,39 @@
-import logo from './logo.svg';
-import './App.css';
+import "./styles/App.css";
+import Header from "./components/Header";
+import Colors from "./constants/Color";
+import { makeStyles } from "@material-ui/core/styles";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+
+import Info from "./components/Info";
+import TypeEffect from "./components/TypeEffect";
+
+const useStyles = makeStyles((theme) => ({
+  App: {
+    backgroundColor: Colors.backgroundColorDark,
+    height: "100vh",
+  },
+}));
 
 function App() {
+  const classes = useStyles();
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className={classes.App}>
+      <Router>
+        <Header />
+
+        <Switch>
+          <Route path="/typeEffect">
+            <TypeEffect />
+          </Route>
+          <Route path="/info">
+            <Info />
+          </Route>
+          <Route path="/">
+            <TypeEffect />
+          </Route>
+        </Switch>
+      </Router>
     </div>
   );
 }
