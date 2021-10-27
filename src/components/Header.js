@@ -5,7 +5,9 @@ import { Button } from "@material-ui/core";
 import { useHistory } from "react-router-dom";
 
 /* Serve as a Title + NavBar 
+    - Team
     - Type Effectiveness
+    - Pokedex
     - Info 
 */
 const useStyles = makeStyles((theme) => ({
@@ -34,6 +36,7 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: "center",
   },
   button: {
+    fontSize: "0.7em",
     color: Color.blackText,
     transition: "0.5s",
     "& :hover , &$focusVisible": {
@@ -45,6 +48,7 @@ const useStyles = makeStyles((theme) => ({
   activeButton: {
     color: Color.redText,
     fontWeight: 550,
+    transition: "0.5s",
     "& $buttonLine": { backgroundColor: Color.redText, width: "100%" },
   },
   buttonLine: {
@@ -72,7 +76,7 @@ const Header = (props) => {
 
   return (
     <div className={classes.header}>
-      <div className={classes.headerTitle}>Pkm Effect</div>
+      <div className={classes.headerTitle}>Pokémon Effect</div>
       <div className={classes.randomAssBlackLine}></div>
       <div className={classes.headerContent}>
         <Button
@@ -99,7 +103,7 @@ const Header = (props) => {
           }
           onClick={() => handleClick("pokedex")}
         >
-          Pokedex
+          Pokédex
           <span className={classes.buttonLine} />
         </Button>
         <Button
