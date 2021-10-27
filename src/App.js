@@ -6,6 +6,8 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 import Info from "./components/Info";
 import TypeEffect from "./components/TypeEffect";
+import Pokedex from "./components/Pokedex";
+import Team from "./components/Team";
 
 const useStyles = makeStyles((theme) => ({
   App: {
@@ -23,11 +25,17 @@ function App() {
         <Header />
 
         <Switch>
+          <Route path="/team">
+            <Team />
+          </Route>
           <Route path="/typeEffect">
             <TypeEffect />
           </Route>
           <Route path="/info">
             <Info />
+          </Route>
+          <Route path="/pokedex">
+            <Pokedex />
           </Route>
           <Route path="/">
             <TypeEffect />
