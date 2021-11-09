@@ -12,7 +12,7 @@ import Team from "./components/Team";
 const useStyles = makeStyles((theme) => ({
   App: {
     backgroundColor: Colors.backgroundColorDark,
-    height: "100vh",
+    height: "100%",
   },
 }));
 
