@@ -25,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
     fontSize: "2em",
     width: "100%",
   },
-  randomAssBlackLine: {
+  blackLine: {
     backgroundColor: "black",
     width: "100%",
     height: "0.3em",
@@ -66,9 +66,12 @@ const useStyles = makeStyles((theme) => ({
 const Header = (props) => {
   const classes = useStyles();
   let history = useHistory();
+
+  // Keeps track of which tab is currently active, by default "typeEffect" tab.
+  // Used to determine which <button> to apply "activeButton" styling to
   const [activeTab, setActiveTab] = useState("typeEffect");
 
-  // Route to path page
+  // Change the page routing to show $path page
   function handleClick(path) {
     history.push(`/${path}`);
     setActiveTab(path);
@@ -77,7 +80,7 @@ const Header = (props) => {
   return (
     <div className={classes.header}>
       <div className={classes.headerTitle}>Pokémon Effect</div>
-      <div className={classes.randomAssBlackLine}></div>
+      <div className={classes.blackLine}></div>
       <div className={classes.headerContent}>
         <Button
           className={
