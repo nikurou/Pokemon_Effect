@@ -14,7 +14,7 @@ export default {
   /* Light Mode */
 
   /* Dark Mode */
-  backgroundColorDark: "#0a1929",
+  backgroundColorDark: "#222327",
 
   /* Type Colors*/
   normalType: "",
