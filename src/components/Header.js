@@ -65,7 +65,7 @@ const useStyles = makeStyles((theme) => ({
 
 const Header = (props) => {
   const classes = useStyles();
-  let history = useHistory();
+  let history = useHistory(); //routing
 
   // Keeps track of which tab is currently active, by default "typeEffect" tab.
   // Used to determine which <button> to apply "activeButton" styling to
