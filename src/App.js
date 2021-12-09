@@ -4,15 +4,15 @@ import Colors from "./constants/Color";
 import { makeStyles } from "@material-ui/core/styles";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
-import Info from "./components/Info";
-import TypeEffect from "./components/TypeEffect";
-import Pokedex from "./components/Pokedex";
-import Team from "./components/Team";
+import Info from "./screens/Info";
+import TypeEffect from "./screens/TypeEffect";
+import Pokedex from "./screens/Pokedex";
+import Team from "./screens/Team";
 
 const useStyles = makeStyles((theme) => ({
   App: {
-    backgroundColor: Colors.backgroundColorDark,
-    height: "100%",
+    backgroundColor: Colors.backgroundColorDark, //Make toggleable between L/D later?
+    minHeight: "100vh",
   },
 }));
 
