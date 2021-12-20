@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Color from "../constants/Color";
 import { Button } from "@material-ui/core";
-import { useHistory } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 
 /* Serve as a Title + NavBar 
     - Team
@@ -69,7 +69,8 @@ const Header = (props) => {
 
   // Keeps track of which tab is currently active, by default "typeEffect" tab.
   // Used to determine which <button> to apply "activeButton" styling to
-  const [activeTab, setActiveTab] = useState("typeEffect");
+  // Always set activetab to current pathname
+  const [activeTab, setActiveTab] = useState(useLocation().pathname.slice(1));
 
   // Change the page routing to show $path page
   function handleClick(path) {
