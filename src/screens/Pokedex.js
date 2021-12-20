@@ -42,16 +42,20 @@ const Pokedex = () => {
   useEffect(() => {
     setLoading(true); //Loading screen
     let cancel;
-    axios
-      .get(currentPage, {
-        canceltoken: new axios.CancelToken((c) => (cancel = c)),
-      })
-      .then((res) => {
-        setLoading(false);
-        setNextPage(res.data.next);
-        setPrevPage(res.data.previous);
-        setPokemonList(res.data.results.map((p) => p));
-      });
+
+    async function fetchData() {
+      await axios
+        .get(currentPage, {
+          canceltoken: new axios.CancelToken((c) => (cancel = c)),
+        })
+        .then((res) => {
+          setLoading(false);
+          setNextPage(res.data.next);
+          setPrevPage(res.data.previous);
+          setPokemonList(res.data.results.map((p) => p));
+        });
+    }
+    fetchData();
     // Cancel previous request if new one is put in
     return () => cancel();
   }, [currentPage]);
@@ -73,7 +77,7 @@ const Pokedex = () => {
   return (
     <div className={classes.pokedexContainer}>
       {pokemonList.map((p) => (
-        <div className={classes.pokeListContainer} key={p}>
+        <div key={p.name} className={classes.pokeListContainer}>
           <PokeCard objectUrl={p.url}></PokeCard>
         </div>
       ))}
