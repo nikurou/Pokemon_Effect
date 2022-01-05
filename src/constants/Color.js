@@ -2,14 +2,14 @@
 export default {
   /* Site Colors*/
   primaryColor: "#ffffff",
-  accentColor: "#ff6f00",
+  accentColor: "#47434C" /*gray*/,
   blackText: "#131313",
   redText: "#e71316",
+  lightgray: "#D6D4D9",
   backgroundPrimary: "rgb(15,15,15)",
   backgroundSecondary: "#e71316",
   backgroundColorLight: "",
   headerTitle: "#e71316",
-  headerContent: "#e5e5e5",
 
   /* Light Mode */
 
