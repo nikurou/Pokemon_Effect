@@ -22,10 +22,11 @@ const useStyles = makeStyles((theme) => ({
   },
   navigationButtonContainer: {},
   pokeListContainer: {
-    marginTop: "5%",
-    marginBotton: "5%",
+    marginTop: "1.5%",
+    marginBotton: "1.5%",
     width: "40%",
   },
+  searchBar: {},
 }));
 
 const Pokedex = () => {
@@ -76,6 +77,7 @@ const Pokedex = () => {
 
   return (
     <div className={classes.pokedexContainer}>
+      <div className={classes.searchBar}></div>
       {pokemonList.map((p) => (
         <div key={p.name} className={classes.pokeListContainer}>
           <PokeCard objectUrl={p.url}></PokeCard>
