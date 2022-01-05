@@ -6,7 +6,7 @@ import axios from "axios";
 /*
     Each card should 
         - Display Image Sprite, Name, #ID, Typing
-        - Show "Defenses" against their typing.
+        - Show "Defenses/Offenses" against their typing.
         - Add to Team Button
         - Link to Bulbapedia Page 
 */
@@ -14,15 +14,30 @@ import axios from "axios";
 const useStyles = makeStyles((theme) => ({
   card: {
     display: "flex",
-    backgroundColor: "white",
-    flexDirection: "row",
+    backgroundColor: Color.accentColor,
+    color: Color.lightgray,
+    flexDirection: "column",
     borderRadius: "0.5rem",
     justifyContent: "space-evenly",
     alignItems: "center",
+    width: "20em",
   },
-  leftContainer: {
-    width: "23%",
-    height: "100%",
+  cardTop: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "90%",
+  },
+  cardBottom: {
+    display: "flex",
+    justifyContent: "flex-end",
+    width: "90%",
+  },
+  cardImage: {
+    "& $img": {
+      height: "10em",
+      width: "10em",
+    },
   },
 }));
 
@@ -31,7 +46,7 @@ const PokeCard = (props) => {
   const classes = useStyles();
   const [spriteIcon, setSprite] = useState({});
   const [name, setName] = useState("");
-  const [id, setID] = useState(0);
+  const [id, setID] = useState("");
   const [types, setTypes] = useState([]);
 
   // Capitalize first letter of input where input can be a string or an array of strings
@@ -50,6 +65,17 @@ const PokeCard = (props) => {
     return temp;
   };
 
+  // Convert any number input into string with "###" format, where missing digits
+  // are filled with 0.
+  const formatID = (id_number) => {
+    console.log("format ID");
+    if (id_number / 100 >= 1) {
+      return "" + id_number;
+    } else if (id_number / 10 >= 1) {
+      return "0" + id_number;
+    } else if (id_number / 1 >= 1) return "00" + id_number;
+  };
+
   //Fetch Pokemon Object on Initial Render of Component
   useEffect(() => {
     axios
@@ -57,7 +83,7 @@ const PokeCard = (props) => {
       .then((res) => {
         setName(res.data.name);
         setSprite(res.data.sprites.front_default);
-        setID(res.data.id);
+        setID(formatID(res.data.id));
         setTypes(res.data.types[0].type.name);
         //if it's dual typing
         if (res.data.types[1] != null) {
@@ -69,13 +95,15 @@ const PokeCard = (props) => {
 
   return (
     <div className={classes.card}>
-      <div className={classes.leftContainer}>
+      <div className={classes.cardTop}>
+        <h3>{toUpperFirstCase(name)}</h3>
+        <p> {` #${id}`}</p>
+      </div>
+      <div className={classes.cardImage}>
         <img src={spriteIcon} alt="spriteIcon"></img>
       </div>
-      <div className={classes.rightContainer}>
-        <h3>{toUpperFirstCase(name)}</h3>
-        <p> {`ID: ${id}`}</p>
-        <p> {`Types: ${toUpperFirstCase(types)}`}</p>
+      <div className={classes.cardBottom}>
+        <p> {`${toUpperFirstCase(types)}`}</p>
       </div>
     </div>
   );
