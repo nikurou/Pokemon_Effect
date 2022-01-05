@@ -31,13 +31,14 @@ const useStyles = makeStyles((theme) => ({
     height: "0.3em",
   },
   headerContent: {
-    backgroundColor: Color.headerContent,
+    backgroundColor: Color.accentColor,
     display: "flex",
     justifyContent: "center",
   },
   button: {
-    fontSize: "0.7em",
-    color: Color.blackText,
+    fontSize: "1em",
+    color: Color.lightgray,
+    fontWeight: 400,
     transition: "0.5s",
     "& :hover , &$focusVisible": {
       color: Color.redText,
@@ -46,6 +47,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   activeButton: {
+    fontSize: "1.0em",
     color: Color.redText,
     fontWeight: 550,
     transition: "0.5s",
