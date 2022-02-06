@@ -21,6 +21,7 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: "space-evenly",
     alignItems: "center",
     width: "20em",
+    height: "20em",
   },
   cardTop: {
     display: "flex",
