@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
   },
   navigationButtonContainer: {
     display: "flex",
-    justifyContent: "center",
+    justifyContent: "space-between",
 
     "& Button": {
       marginLeft: ".5%",
@@ -49,14 +49,15 @@ const useStyles = makeStyles((theme) => ({
 
 const Pokedex = () => {
   const classes = useStyles();
-  const [pokemonList, setPokemonList] = useState([]);
-  const [tempList, setTempList] = useState([]);
+  const [currentList, setCurrentList] = useState([]);
+  const [originalList, setOriginalList] = useState([]);
   const [currentPage, setCurrentPage] = useState(
     "https://pokeapi.co/api/v2/pokemon"
   );
   const [nextPage, setNextPage] = useState();
   const [prevPage, setPrevPage] = useState();
   const [loading, setLoading] = useState(true); //by default, we are buffering
+  const [error, setError] = useState(false); // determines if error screen pops up
   const [searchInput, setInput] = useState("");
 
   // Fetch first 20 Pokemon, set next and previous page
@@ -71,9 +72,11 @@ const Pokedex = () => {
         })
         .then((res) => {
           setLoading(false);
+          setError(false);
           setNextPage(res.data.next);
           setPrevPage(res.data.previous);
-          setPokemonList(res.data.results.map((p) => p));
+          setCurrentList(res.data.results.map((p) => p));
+          setOriginalList(res.data.results.map((p) => p));
         });
     }
     fetchData();
@@ -94,8 +97,12 @@ const Pokedex = () => {
   const handleSearchChange = (event) => {
     setInput(event.target.value);
 
-    if (event.target.value == "" && tempList != []) {
-      setPokemonList(tempList);
+    if (event.target.value == "" && originalList != []) {
+      setCurrentList(originalList);
+    }
+    // If text empty, there will be no error
+    if (event.target.value == "") {
+      setError(false);
     }
   };
 
@@ -103,24 +110,63 @@ const Pokedex = () => {
   // Axios not really needed except to validate search result
   // TODO: Partial Word
   const handleSearch = () => {
-    var name = searchInput.toLowerCase();
-    var url = `https://pokeapi.co/api/v2/pokemon/${searchInput.toLowerCase()}/`;
+    var name = searchInput.trim().toLowerCase();
+    var url = `https://pokeapi.co/api/v2/pokemon/${name}/`;
+
+    if (name === "") {
+      return;
+    }
 
     axios
-      .get(`https://pokeapi.co/api/v2/pokemon/${searchInput.toLowerCase()}/`)
+      .get(url)
       .then((res) => {
-        setTempList(pokemonList);
-        setPokemonList([{ name, url }]);
+        setCurrentList([{ name, url }]);
       })
+      // If such a query does not exist or some error
       .catch((Error) => {
         console.log("Error");
+        setError(true);
       });
   };
 
-  // If Loading is true, display this buffering
-  // TODO : Would be cool to do the spinning pokeball animation
-  if (loading)
-    return <div className={classes.pokedexContainer}>Fetching Results!</div>;
+  // Decides which DIV to render based on conditions
+  function RenderDecider({ error, loading }) {
+    if (error) {
+      return (
+        <div className={classes.pokedexContainer}>
+          <p>That Pokemon does not exist! Check your spelling or try again. </p>
+        </div>
+      );
+    } else if (loading) {
+      return <div className={classes.pokedexContainer}>Fetching Results!</div>;
+    } else {
+      return currentList.map((p) => (
+        <div key={p.name} className={classes.pokeListContainer}>
+          <PokeCard objectUrl={p.url}></PokeCard>
+        </div>
+      ));
+    }
+  }
+
+  // Nav Controls
+  function NavigationControls() {
+    return (
+      <div className={classes.navigationButtonContainer}>
+        {prevPage == null ? (
+          <Button variant="contained" disabled>
+            Previous
+          </Button>
+        ) : (
+          <Button variant="outlined" onClick={handlePrevPage}>
+            Previous
+          </Button>
+        )}
+        <Button variant="outlined" onClick={handleNextPage}>
+          Next
+        </Button>
+      </div>
+    );
+  }
 
   return (
     <div className={classes.pokedexContainer}>
@@ -132,49 +178,11 @@ const Pokedex = () => {
           handleSearch={handleSearch}
         ></SearchBar>
       </div>
-
-      {/*NAVIGATION CONTROLS*/}
-      <div className={classes.navigationButtonContainer}>
-        {prevPage == null ? (
-          <Button variant="contained" disabled>
-            Previous
-          </Button>
-        ) : (
-          <Button variant="outlined" onClick={handlePrevPage}>
-            Previous
-          </Button>
-        )}
-
-        <Button variant="outlined" onClick={handleNextPage}>
-          Next
-        </Button>
-      </div>
-
-      {/*POKECARDS*/}
-      {pokemonList.map((p) => (
-        <div key={p.name} className={classes.pokeListContainer}>
-          <PokeCard objectUrl={p.url}></PokeCard>
-        </div>
-      ))}
-
-      {/*NAVIGATION CONTROLS*/}
-      <div
-        className={classes.navigationButtonContainer}
-        style={{ marginTop: "2%", marginBottom: "2%" }}
-      >
-        {prevPage == null ? (
-          <Button variant="contained" disabled>
-            Previous
-          </Button>
-        ) : (
-          <Button variant="outlined" onClick={handlePrevPage}>
-            Previous
-          </Button>
-        )}
-
-        <Button variant="outlined" onClick={handleNextPage}>
-          Next
-        </Button>
+      <NavigationControls />
+      <RenderDecider error={error} loading={loading} />
+      {/* Error Screen, Loading Screen, or Content*/}
+      <div style={{ marginTop: "2%", marginBottom: "2%" }}>
+        <NavigationControls />
       </div>
     </div>
   );
