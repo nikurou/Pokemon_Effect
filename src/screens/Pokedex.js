@@ -3,6 +3,8 @@ import axios from "axios";
 import { Button } from "@mui/material";
 import { makeStyles } from "@material-ui/core/styles";
 import PokeCard from "../components/PokeCard";
+import TextField from "@mui/material/TextField";
+import SearchBar from "../components/SearchBar";
 
 /*
     Use PokeAPI to allow the user to search for Pokemons,
@@ -18,26 +20,44 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     flexDirection: "column",
     justifyContent: "space-evenly",
-    alignItems: "center",
+    width: "50%",
+    marginLeft: "25%",
+    marginRight: "25%",
   },
-  navigationButtonContainer: {},
+  navigationButtonContainer: {
+    display: "flex",
+    justifyContent: "center",
+
+    "& Button": {
+      marginLeft: ".5%",
+      marginRight: ".5%",
+    },
+  },
   pokeListContainer: {
     marginTop: "1.5%",
     marginBotton: "1.5%",
     width: "40%",
   },
-  searchBar: {},
+  searchBar: {
+    display: "flex",
+    justifyContent: "center",
+    width: "100%",
+    marginTop: "1.5%",
+    marginBottom: "1.5%",
+  },
 }));
 
 const Pokedex = () => {
   const classes = useStyles();
   const [pokemonList, setPokemonList] = useState([]);
+  const [tempList, setTempList] = useState([]);
   const [currentPage, setCurrentPage] = useState(
     "https://pokeapi.co/api/v2/pokemon"
   );
   const [nextPage, setNextPage] = useState();
   const [prevPage, setPrevPage] = useState();
   const [loading, setLoading] = useState(true); //by default, we are buffering
+  const [searchInput, setInput] = useState("");
 
   // Fetch first 20 Pokemon, set next and previous page
   useEffect(() => {
@@ -70,6 +90,33 @@ const Pokedex = () => {
     }
   };
 
+  // On text change, update search bar text
+  const handleSearchChange = (event) => {
+    setInput(event.target.value);
+
+    if (event.target.value == "" && tempList != []) {
+      setPokemonList(tempList);
+    }
+  };
+
+  // On Search, display the searched Pokemon
+  // Axios not really needed except to validate search result
+  // TODO: Partial Word
+  const handleSearch = () => {
+    var name = searchInput.toLowerCase();
+    var url = `https://pokeapi.co/api/v2/pokemon/${searchInput.toLowerCase()}/`;
+
+    axios
+      .get(`https://pokeapi.co/api/v2/pokemon/${searchInput.toLowerCase()}/`)
+      .then((res) => {
+        setTempList(pokemonList);
+        setPokemonList([{ name, url }]);
+      })
+      .catch((Error) => {
+        console.log("Error");
+      });
+  };
+
   // If Loading is true, display this buffering
   // TODO : Would be cool to do the spinning pokeball animation
   if (loading)
@@ -77,14 +124,44 @@ const Pokedex = () => {
 
   return (
     <div className={classes.pokedexContainer}>
-      <div className={classes.searchBar}></div>
+      {/*SEARCH BAR*/}
+      <div className={classes.searchBar}>
+        <SearchBar
+          searchInput={searchInput}
+          handleSearchChange={handleSearchChange}
+          handleSearch={handleSearch}
+        ></SearchBar>
+      </div>
+
+      {/*NAVIGATION CONTROLS*/}
+      <div className={classes.navigationButtonContainer}>
+        {prevPage == null ? (
+          <Button variant="contained" disabled>
+            Previous
+          </Button>
+        ) : (
+          <Button variant="outlined" onClick={handlePrevPage}>
+            Previous
+          </Button>
+        )}
+
+        <Button variant="outlined" onClick={handleNextPage}>
+          Next
+        </Button>
+      </div>
+
+      {/*POKECARDS*/}
       {pokemonList.map((p) => (
         <div key={p.name} className={classes.pokeListContainer}>
           <PokeCard objectUrl={p.url}></PokeCard>
         </div>
       ))}
 
-      <div>
+      {/*NAVIGATION CONTROLS*/}
+      <div
+        className={classes.navigationButtonContainer}
+        style={{ marginTop: "2%", marginBottom: "2%" }}
+      >
         {prevPage == null ? (
           <Button variant="contained" disabled>
             Previous
