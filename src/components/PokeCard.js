@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Color from "../constants/Color";
 import axios from "axios";
+import { colors } from "@material-ui/core";
+import EffectivenessDisplay from "./EffectivenessDisplay";
 
 /*
     Each card should 
@@ -12,6 +14,10 @@ import axios from "axios";
 */
 
 const useStyles = makeStyles((theme) => ({
+  container: {
+    display: "flex",
+    justifyContent: "space-between",
+  },
   card: {
     display: "flex",
     backgroundColor: Color.accentColor,
@@ -20,8 +26,9 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: "0.5rem",
     justifyContent: "space-evenly",
     alignItems: "center",
-    width: "20em",
-    height: "20em",
+    flexGrow: "2",
+    height: "16em",
+    marginRight: "1em",
   },
   cardTop: {
     display: "flex",
@@ -40,9 +47,16 @@ const useStyles = makeStyles((theme) => ({
       width: "10em",
     },
   },
+  effectivenessContainer: {
+    flexGrow: "8",
+
+    "&": {
+      color: colors.lightgray,
+    },
+  },
 }));
 
-//props: props.name, props.objectUrl
+//props: props.objectUrl, props.handleSetLoading
 const PokeCard = (props) => {
   const classes = useStyles();
   const [spriteIcon, setSprite] = useState({});
@@ -69,7 +83,6 @@ const PokeCard = (props) => {
   // Convert any number input into string with "###" format, where missing digits
   // are filled with 0.
   const formatID = (id_number) => {
-    console.log("format ID");
     if (id_number / 100 >= 1) {
       return "" + id_number;
     } else if (id_number / 10 >= 1) {
@@ -86,26 +99,34 @@ const PokeCard = (props) => {
         setSprite(res.data.sprites.front_default);
         setID(formatID(res.data.id));
         setTypes(res.data.types[0].type.name);
+
         //if it's dual typing
         if (res.data.types[1] != null) {
           setTypes([res.data.types[0].type.name, res.data.types[1].type.name]);
         }
       })
-      .catch((error) => console.log(error));
+      .catch((error) => error);
   }, []);
 
   return (
-    <div className={classes.card}>
-      <div className={classes.cardTop}>
-        <h3>{toUpperFirstCase(name)}</h3>
-        <p> {` #${id}`}</p>
+    <div className={classes.container}>
+      <div className={classes.card}>
+        <div className={classes.cardTop}>
+          <h3>{toUpperFirstCase(name)}</h3>
+          <p> {` #${id}`}</p>
+        </div>
+        <div className={classes.cardImage}>
+          <img src={spriteIcon} alt="spriteIcon"></img>
+        </div>
+        <div className={classes.cardBottom}>
+          <p> {`${toUpperFirstCase(types)}`}</p>
+        </div>
       </div>
-      <div className={classes.cardImage}>
-        <img src={spriteIcon} alt="spriteIcon"></img>
-      </div>
-      <div className={classes.cardBottom}>
-        <p> {`${toUpperFirstCase(types)}`}</p>
-      </div>
+
+      <EffectivenessDisplay
+        types={types}
+        style={classes.effectivenessContainer}
+      />
     </div>
   );
 };
