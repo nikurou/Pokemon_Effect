@@ -10,7 +10,7 @@ const useStyles = makeStyles((theme) => ({
     transition: "width .2s",
   },
   searchOnBlur: {
-    width: "97%",
+    width: "99%",
     transition: "width .2s",
   },
   searchBar: {
@@ -43,7 +43,6 @@ const SearchBar = ({ searchInput, handleSearchChange, handleSearch }) => {
   // If Enter is hit, commence the search
   const handleKeyDown = (event) => {
     if (event.key == "Enter") {
-      console.log("Enter Pressed");
       handleSearch();
     }
   };
