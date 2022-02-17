@@ -3,8 +3,8 @@ import axios from "axios";
 import { Button } from "@mui/material";
 import { makeStyles } from "@material-ui/core/styles";
 import PokeCard from "../components/PokeCard";
-import TextField from "@mui/material/TextField";
 import SearchBar from "../components/SearchBar";
+import Color from "../constants/Color";
 
 /*
     Use PokeAPI to allow the user to search for Pokemons,
@@ -20,23 +20,22 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     flexDirection: "column",
     justifyContent: "space-evenly",
-    width: "50%",
-    marginLeft: "25%",
-    marginRight: "25%",
+    width: "50em",
+    margin: "auto",
+    "& p": {
+      color: Color.lightgray,
+    },
   },
   navigationButtonContainer: {
     display: "flex",
     justifyContent: "space-between",
 
-    "& Button": {
-      marginLeft: ".5%",
-      marginRight: ".5%",
-    },
+    "& Button": {},
   },
   pokeListContainer: {
     marginTop: "1.5%",
     marginBotton: "1.5%",
-    width: "40%",
+    width: "100%",
   },
   searchBar: {
     display: "flex",
@@ -97,11 +96,11 @@ const Pokedex = () => {
   const handleSearchChange = (event) => {
     setInput(event.target.value);
 
-    if (event.target.value == "" && originalList != []) {
+    if (event.target.value === "" && originalList !== []) {
       setCurrentList(originalList);
     }
     // If text empty, there will be no error
-    if (event.target.value == "") {
+    if (event.target.value === "") {
       setError(false);
     }
   };
@@ -124,12 +123,11 @@ const Pokedex = () => {
       })
       // If such a query does not exist or some error
       .catch((Error) => {
-        console.log("Error");
         setError(true);
       });
   };
 
-  // Decides which DIV to render based on conditions
+  // Decides to render ERROR, LOADING, or RESULTS based on conditions
   function RenderDecider({ error, loading }) {
     if (error) {
       return (
@@ -140,11 +138,19 @@ const Pokedex = () => {
     } else if (loading) {
       return <div className={classes.pokedexContainer}>Fetching Results!</div>;
     } else {
-      return currentList.map((p) => (
-        <div key={p.name} className={classes.pokeListContainer}>
-          <PokeCard objectUrl={p.url}></PokeCard>
+      return (
+        <div>
+          <NavigationControls />
+          {currentList.map((p) => (
+            <div key={p.name} className={classes.pokeListContainer}>
+              <PokeCard objectUrl={p.url}></PokeCard>
+            </div>
+          ))}
+          <div style={{ marginTop: "2%", marginBottom: "2%" }}>
+            <NavigationControls />
+          </div>
         </div>
-      ));
+      );
     }
   }
 
@@ -170,7 +176,6 @@ const Pokedex = () => {
 
   return (
     <div className={classes.pokedexContainer}>
-      {/*SEARCH BAR*/}
       <div className={classes.searchBar}>
         <SearchBar
           searchInput={searchInput}
@@ -178,12 +183,9 @@ const Pokedex = () => {
           handleSearch={handleSearch}
         ></SearchBar>
       </div>
-      <NavigationControls />
+
+      {/* Render either loading screen, error, or PokeCards */}
       <RenderDecider error={error} loading={loading} />
-      {/* Error Screen, Loading Screen, or Content*/}
-      <div style={{ marginTop: "2%", marginBottom: "2%" }}>
-        <NavigationControls />
-      </div>
     </div>
   );
 };
