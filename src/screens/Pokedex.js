@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import axios from "axios";
 import { Button } from "@mui/material";
 import { makeStyles } from "@material-ui/core/styles";
@@ -127,32 +127,33 @@ const Pokedex = () => {
       });
   };
 
-  // Decides to render ERROR, LOADING, or RESULTS based on conditions
-  function RenderDecider({ error, loading }) {
-    if (error) {
-      return (
-        <div className={classes.pokedexContainer}>
-          <p>That Pokemon does not exist! Check your spelling or try again. </p>
-        </div>
-      );
-    } else if (loading) {
-      return <div className={classes.pokedexContainer}>Fetching Results!</div>;
-    } else {
-      return (
-        <div>
-          <NavigationControls />
-          {currentList.map((p) => (
-            <div key={p.name} className={classes.pokeListContainer}>
-              <PokeCard objectUrl={p.url}></PokeCard>
-            </div>
-          ))}
-          <div style={{ marginTop: "2%", marginBottom: "2%" }}>
-            <NavigationControls />
+  const displayPokeCards = () => {
+    return (
+      <div>
+        <NavigationControls />
+        {currentList.map((p) => (
+          <div key={p.name} className={classes.pokeListContainer}>
+            <PokeCard objectUrl={p.url}></PokeCard>
           </div>
+        ))}
+        <div style={{ marginTop: "2%", marginBottom: "2%" }}>
+          <NavigationControls />
         </div>
-      );
-    }
-  }
+      </div>
+    );
+  };
+
+  const displayError = () => {
+    return (
+      <div className={classes.pokedexContainer}>
+        <p>That Pokemon does not exist! Check your spelling or try again. </p>
+      </div>
+    );
+  };
+
+  const displayLoading = () => {
+    return <div className={classes.pokedexContainer}>Fetching Results!</div>;
+  };
 
   // Nav Controls
   function NavigationControls() {
@@ -185,7 +186,14 @@ const Pokedex = () => {
       </div>
 
       {/* Render either loading screen, error, or PokeCards */}
-      <RenderDecider error={error} loading={loading} />
+
+      {
+        error === true // is error true?
+          ? displayError() // if so displayError
+          : loading === true // otherwiser is loading true?
+          ? displayLoading() // if so display loading
+          : displayPokeCards() // else just show cards
+      }
     </div>
   );
 };
