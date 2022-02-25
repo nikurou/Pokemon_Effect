@@ -42,7 +42,7 @@ const SearchBar = ({ searchInput, handleSearchChange, handleSearch }) => {
 
   // If Enter is hit, commence the search
   const handleKeyDown = (event) => {
-    if (event.key == "Enter") {
+    if (event.key === "Enter") {
       handleSearch();
     }
   };
