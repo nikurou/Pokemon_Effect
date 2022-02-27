@@ -95,6 +95,7 @@ const PokeCard = (props) => {
     axios
       .get(props.objectUrl)
       .then((res) => {
+        //console.log("\n\nEVALUATING: ", res.data.name, "\n\n");
         setName(res.data.name);
         setSprite(res.data.sprites.front_default);
         setID(formatID(res.data.id));

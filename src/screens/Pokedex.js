@@ -186,7 +186,6 @@ const Pokedex = () => {
       </div>
 
       {/* Render either loading screen, error, or PokeCards */}
-
       {
         error === true // is error true?
           ? displayError() // if so displayError
