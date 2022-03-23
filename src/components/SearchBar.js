@@ -7,10 +7,12 @@ import { useState } from "react";
 const useStyles = makeStyles((theme) => ({
   searchOnFocus: {
     width: "100%",
-    transition: "width .2s",
+    transition: "width 0.2s",
   },
   searchOnBlur: {
-    width: "99%",
+    width: "99.5%",
+    marginLeft: "auto",
+    marginRight: "auto",
     transition: "width .2s",
   },
   searchBar: {
@@ -43,6 +45,7 @@ const SearchBar = ({ searchInput, handleSearchChange, handleSearch }) => {
   // If Enter is hit, commence the search
   const handleKeyDown = (event) => {
     if (event.key === "Enter") {
+      console.log("Enter pressed");
       handleSearch();
     }
   };
