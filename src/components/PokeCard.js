@@ -2,8 +2,9 @@ import React, { useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Color from "../constants/Color";
 import axios from "axios";
-import { colors } from "@material-ui/core";
+
 import EffectivenessDisplay from "./EffectivenessDisplay";
+import Card from "./Card";
 
 /*
     Each card should 
@@ -15,43 +16,28 @@ import EffectivenessDisplay from "./EffectivenessDisplay";
 
 const useStyles = makeStyles((theme) => ({
   container: {
+    fontSize: "1em",
+    marginTop: "1em",
+  },
+
+  split: {
     display: "flex",
     justifyContent: "space-between",
-  },
-  card: {
-    display: "flex",
-    backgroundColor: Color.accentColor,
-    color: Color.lightgray,
     flexDirection: "column",
-    borderRadius: "0.5rem",
-    justifyContent: "space-evenly",
-    alignItems: "center",
-    flexGrow: "2",
-    height: "16em",
-    marginRight: "1em",
-  },
-  cardTop: {
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "space-between",
-    width: "90%",
-  },
-  cardBottom: {
-    display: "flex",
-    justifyContent: "flex-end",
-    width: "90%",
-  },
-  cardImage: {
-    "& $img": {
-      height: "10em",
-      width: "10em",
-    },
   },
   effectivenessContainer: {
-    flexGrow: "8",
-
+    flexGrow: 1,
     "&": {
-      color: colors.lightgray,
+      color: Color.lightgray,
+    },
+  },
+
+  // MEDIA QUERY
+  "@media (min-width: 40em)": {
+    //beyond 640px activates
+    split: {
+      flexDirection: "row",
+      "& > * + *": { marginLeft: "2em" }, // Adjacent Sibling, separates two selectors and matches the second element only
     },
   },
 }));
@@ -111,23 +97,19 @@ const PokeCard = (props) => {
 
   return (
     <div className={classes.container}>
-      <div className={classes.card}>
-        <div className={classes.cardTop}>
-          <h3>{toUpperFirstCase(name)}</h3>
-          <p> {` #${id}`}</p>
-        </div>
-        <div className={classes.cardImage}>
-          <img src={spriteIcon} alt="spriteIcon"></img>
-        </div>
-        <div className={classes.cardBottom}>
-          <p> {`${toUpperFirstCase(types)}`}</p>
-        </div>
-      </div>
+      <div className={classes.split}>
+        <Card
+          title={toUpperFirstCase(name)}
+          id={id}
+          types={toUpperFirstCase(types)}
+          icon={spriteIcon}
+        ></Card>
 
-      <EffectivenessDisplay
-        types={types}
-        style={classes.effectivenessContainer}
-      />
+        <EffectivenessDisplay
+          types={types}
+          style={classes.effectivenessContainer}
+        />
+      </div>
     </div>
   );
 };
