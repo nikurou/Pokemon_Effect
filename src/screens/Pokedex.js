@@ -16,21 +16,22 @@ import Color from "../constants/Color";
 */
 
 const useStyles = makeStyles((theme) => ({
-  pokedexContainer: {
+  pokedexBody: {
     display: "flex",
     flexDirection: "column",
     justifyContent: "space-evenly",
-    width: "50em",
-    margin: "auto",
     "& p": {
       color: Color.lightgray,
     },
   },
+  container: {
+    width: "80%",
+    margin: "auto",
+  },
   navigationButtonContainer: {
     display: "flex",
     justifyContent: "space-between",
-
-    "& Button": {},
+    "& Button": { color: Color.lightgray, borderColor: Color.lightgray },
   },
   pokeListContainer: {
     marginTop: "1.5%",
@@ -39,8 +40,10 @@ const useStyles = makeStyles((theme) => ({
   },
   searchBar: {
     display: "flex",
-    justifyContent: "center",
+    justifyContent: "space-between",
+    flexDirection: "column",
     width: "100%",
+
     marginTop: "1.5%",
     marginBottom: "1.5%",
   },
@@ -109,7 +112,10 @@ const Pokedex = () => {
   // Axios not really needed except to validate search result
   // TODO: Partial Word
   const handleSearch = () => {
+    setError(false); //anytime search is ran, error is false until reverified
+    setLoading(true);
     var name = searchInput.trim().toLowerCase();
+    console.log("handlesearch called with ", name);
     var url = `https://pokeapi.co/api/v2/pokemon/${name}/`;
 
     if (name === "") {
@@ -120,9 +126,11 @@ const Pokedex = () => {
       .get(url)
       .then((res) => {
         setCurrentList([{ name, url }]);
+        setLoading(false);
       })
       // If such a query does not exist or some error
       .catch((Error) => {
+        setLoading(false);
         setError(true);
       });
   };
@@ -130,7 +138,6 @@ const Pokedex = () => {
   const displayPokeCards = () => {
     return (
       <div>
-        <NavigationControls />
         {currentList.map((p) => (
           <div key={p.name} className={classes.pokeListContainer}>
             <PokeCard objectUrl={p.url}></PokeCard>
@@ -177,22 +184,27 @@ const Pokedex = () => {
 
   return (
     <div className={classes.pokedexContainer}>
-      <div className={classes.searchBar}>
-        <SearchBar
-          searchInput={searchInput}
-          handleSearchChange={handleSearchChange}
-          handleSearch={handleSearch}
-        ></SearchBar>
-      </div>
+      <div className={classes.container}>
+        <div className={classes.searchBar}>
+          <SearchBar
+            searchInput={searchInput}
+            handleSearchChange={handleSearchChange}
+            handleSearch={handleSearch}
+          ></SearchBar>
+          <div style={{ marginTop: "1%" }}>
+            <NavigationControls />
+          </div>
+        </div>
 
-      {/* Render either loading screen, error, or PokeCards */}
-      {
-        error === true // is error true?
-          ? displayError() // if so displayError
-          : loading === true // otherwiser is loading true?
-          ? displayLoading() // if so display loading
-          : displayPokeCards() // else just show cards
-      }
+        {/* Render either loading screen, error, or PokeCards */}
+        {
+          error === true // is error true?
+            ? displayError() // if so displayError
+            : loading === true // otherwiser is loading true?
+            ? displayLoading() // if so display loading
+            : displayPokeCards() // else just show cards
+        }
+      </div>
     </div>
   );
 };
