@@ -1,21 +1,21 @@
 /* || General styles */
 .App {
-  text-align: center;
+  margin: 0;
 }
 
 /* || Header and Main Navigation */
 .header {
   display: flex;
   flex-direction: column;
-  min-height:15%;
+  min-height: 15%;
 }
 
-.header .title{
+.header .title {
   background-color: red;
-  width: 100%;
-  height:25%;
+
+  height: 25%;
 }
 
 .header .content {
-  background-color:blue;
+  background-color: blue;
 }
