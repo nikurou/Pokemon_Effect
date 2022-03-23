@@ -1,6 +1,7 @@
 import { Merge } from "@mui/icons-material";
 import React, { useCallback, useEffect, useState } from "react";
 import pokeAPIServices from "../services/pokeAPIServices";
+import TypeDisplay from "./TypeDisplay";
 
 /*
  * Component that houses the logic to calculate damage relations for each Pokemon
@@ -20,8 +21,6 @@ const EffectivenessDisplay = (props) => {
    * and set hooks accordingly
    */
   useEffect(() => {
-    console.log("type", typeof props.types);
-    console.log(typeof props.types === "string");
     //Dual Typing
     if (props.types.length === 2 && typeof props.types === "object") {
       let one_damage_relations = null;
@@ -39,7 +38,6 @@ const EffectivenessDisplay = (props) => {
     }
     //Mono Typed (props.types will come in as string i.e. "fighting")
     else if (typeof props.types === "string") {
-      console.log("test");
       pokeAPIServices.getTypeDamageRelations(props.types).then((res) => {
         handleSetRelations(res);
       });
@@ -124,11 +122,23 @@ const EffectivenessDisplay = (props) => {
 
   return (
     <div className={props.style}>
-      <div>x4 {quad_damage_from} </div>
-      <div>x2 {double_damage_from}</div>
-      <div>x1/2 {half_damage_from}</div>
-      <div>x1/4 {fourth_damage_from}</div>
-      <div>Immune {no_damage_from}</div>
+      {/*4x Effectiveness*/}
+      {quad_damage_from.length !== 0 ? <div>x4 {quad_damage_from} </div> : null}
+
+      {double_damage_from.length !== 0 ? (
+        <div>x2 {double_damage_from} </div>
+      ) : null}
+
+      {half_damage_from.length !== 0 ? (
+        <div>x1/2 {half_damage_from} </div>
+      ) : null}
+
+      {fourth_damage_from.length !== 0 ? (
+        <div>x1/4 {fourth_damage_from} </div>
+      ) : null}
+
+      {no_damage_from.length !== 0 ? <div>x0 {no_damage_from} </div> : null}
+      <TypeDisplay relationArray={double_damage_from}></TypeDisplay>
     </div>
   );
 };
