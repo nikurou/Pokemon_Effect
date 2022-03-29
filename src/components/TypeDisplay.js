@@ -10,50 +10,48 @@ import Color from "../constants/Color";
 
 const useStyles = makeStyles((theme) => ({
   container: {
-    backgroundColor: Color.bugType,
     display: "flex",
     flexWrap: "wrap",
-    alignItems: "center",
-    justifyContent: "space-evenly",
+    justifyContent: "flex-start",
     marginRight: "1em",
+    flexDirection: "row",
+    maxWidth: "100%",
 
     "& $p": {
-      backgroundColor: "red",
+      margin: "0",
     },
   },
   typeBox: {
-    backgroundColor: Color.dragonType,
     borderRadius: "20%",
-    paddingLeft: ".5em",
-    paddingRight: ".5em",
+    padding: "0.5rem",
     color: Color.primaryColor,
-  }, 
+    marginRight: "0.5em",
+    marginTop: "0.3em",
+  },
 }));
 
-const TypeDisplay = (relationArray) => {
+const TypeDisplay = (props) => {
   const classes = useStyles();
+  const [rel, setRel] = useState([]);
 
-  const displayTags = (relationArray) => {
-    return "test";
-  };
+  useEffect(() => {
+    setRel(props.relationArray);
+  }, [props.relationArray]);
 
-  useEffect(() => {}, [relationArray]);
   return (
     <div className={classes.container}>
-      <div className={classes.typeBox}>ele</div>
-      <p>ele</p>
-      <p>ele</p>
-      <p>ele</p>
-      <p>ele</p>
-      <p>ele</p>
-      <p>ele</p>
-      <p>ele</p>
-      <p>ele</p>
-      <p>ele</p>
-      <p>ele</p>
-      <p>ele</p>
-      <p>ele</p>
-      <p>ele</p>
+      {rel.length !== 0
+        ? rel.map((ele) => {
+            return (
+              <div
+                className={classes.typeBox}
+                style={{ backgroundColor: Color.dragonType }}
+              >
+                <p>{ele.toUpperCase()}</p>
+              </div>
+            );
+          })
+        : null}
     </div>
   );
 };
