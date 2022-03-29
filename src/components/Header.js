@@ -63,6 +63,16 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: "50%",
     transition: "0.2s",
   },
+
+  // MEDIA QUERY
+  "@media (max-width: 20em)": {
+    button: { fontSize: "0.5rem" },
+  },
+
+  // MEDIA QUERY
+  "@media (max-width: 24em)": {
+    button: { fontSize: "0.7rem" },
+  },
 }));
 
 const Header = (props) => {

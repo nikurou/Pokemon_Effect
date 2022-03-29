@@ -1,14 +1,31 @@
-import { Merge } from "@mui/icons-material";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
+import { makeStyles } from "@material-ui/core/styles";
 import pokeAPIServices from "../services/pokeAPIServices";
 import TypeDisplay from "./TypeDisplay";
 
 /*
  * Component that houses the logic to calculate damage relations for each Pokemon
- * and displays it.
+ * then passes the data to component TypeDisplay, which displays it.
  */
 
+const useStyles = makeStyles((theme) => ({
+  container: {
+    display: "flex",
+    flexDirection: "column",
+  },
+  // MEDIA QUERY
+  "@media (min-width: 40em)": {
+    //beyond 640px activates (Desktop mode)
+    container: {
+      flexDirection: "row",
+      "& > * + *": { marginLeft: "1em" }, // Adjacent Sibling, separates two selectors and matches the second element only
+      "& p": { minWidth: "2.2em" },
+    },
+  },
+}));
+
 const EffectivenessDisplay = (props) => {
+  const classes = useStyles();
   const [quad_damage_from, setQuad] = useState([]);
   const [double_damage_from, setDouble] = useState([]);
   const [half_damage_from, setHalf] = useState([]);
@@ -123,22 +140,36 @@ const EffectivenessDisplay = (props) => {
   return (
     <div className={props.style}>
       {/*4x Effectiveness*/}
-      {quad_damage_from.length !== 0 ? <div>x4 {quad_damage_from} </div> : null}
+      {quad_damage_from.length !== 0 ? (
+        <div className={classes.container}>
+          <p>x4</p> <TypeDisplay relationArray={quad_damage_from} />
+        </div>
+      ) : null}
 
       {double_damage_from.length !== 0 ? (
-        <div>x2 {double_damage_from} </div>
+        <div className={classes.container}>
+          <p>x2</p> <TypeDisplay relationArray={double_damage_from} />
+        </div>
       ) : null}
 
       {half_damage_from.length !== 0 ? (
-        <div>x1/2 {half_damage_from} </div>
+        <div className={classes.container}>
+          <p>x1/2 </p>
+          <TypeDisplay relationArray={half_damage_from} />
+        </div>
       ) : null}
 
       {fourth_damage_from.length !== 0 ? (
-        <div>x1/4 {fourth_damage_from} </div>
+        <div className={classes.container}>
+          <p>x1/4</p> <TypeDisplay relationArray={fourth_damage_from} />
+        </div>
       ) : null}
 
-      {no_damage_from.length !== 0 ? <div>x0 {no_damage_from} </div> : null}
-      <TypeDisplay relationArray={double_damage_from}></TypeDisplay>
+      {no_damage_from.length !== 0 ? (
+        <div className={classes.container}>
+          <p>x0</p> <TypeDisplay relationArray={no_damage_from} />
+        </div>
+      ) : null}
     </div>
   );
 };

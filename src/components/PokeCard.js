@@ -18,14 +18,15 @@ const useStyles = makeStyles((theme) => ({
   container: {
     fontSize: "1em",
     marginTop: "1em",
+    overflow: "hidden",
   },
-
   split: {
     display: "flex",
     justifyContent: "space-between",
     flexDirection: "column",
   },
   effectivenessContainer: {
+    display: "flex",
     flexGrow: 1,
     "&": {
       color: Color.lightgray,
@@ -34,10 +35,13 @@ const useStyles = makeStyles((theme) => ({
 
   // MEDIA QUERY
   "@media (min-width: 40em)": {
-    //beyond 640px activates
+    //beyond 640px activates (Desktop mode)
     split: {
       flexDirection: "row",
       "& > * + *": { marginLeft: "2em" }, // Adjacent Sibling, separates two selectors and matches the second element only
+    },
+    effectivenessContainer: {
+      flexDirection: "column",
     },
   },
 }));

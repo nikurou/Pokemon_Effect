@@ -35,6 +35,10 @@ const useStyles = makeStyles((theme) => ({
     "&:focus": { width: "85%", outline: "None" },
     "&::placeholder": { color: "white" },
   },
+  // MEDIA QUERY
+  "@media (min-width: 40em)": {
+    //beyond 640px activates
+  },
 }));
 
 const SearchBar = ({ searchInput, handleSearchChange, handleSearch }) => {
@@ -51,26 +55,30 @@ const SearchBar = ({ searchInput, handleSearchChange, handleSearch }) => {
   };
 
   return (
-    <div
-      className={isInputFocused ? classes.searchOnFocus : classes.searchOnBlur}
-      tabIndex="1"
-    >
-      <Paper className={classes.searchBar}>
-        <div className={classes.icon}>
-          <SearchIcon style={{ color: "white" }} />
-        </div>
-        <div className={classes.inputView}>
-          <input
-            placeholder="Search by name, id..."
-            className={classes.input}
-            onFocus={() => setIsInputFocused(true)}
-            onBlur={() => setIsInputFocused(false)}
-            value={searchInput}
-            onChange={handleSearchChange}
-            onKeyDown={handleKeyDown}
-          />
-        </div>
-      </Paper>
+    <div className={classes.searchContainer}>
+      <div
+        className={
+          isInputFocused ? classes.searchOnFocus : classes.searchOnBlur
+        }
+        tabIndex="1"
+      >
+        <Paper className={classes.searchBar}>
+          <div className={classes.icon}>
+            <SearchIcon style={{ color: "white" }} />
+          </div>
+          <div className={classes.inputView}>
+            <input
+              placeholder="Search by name, id..."
+              className={classes.input}
+              onFocus={() => setIsInputFocused(true)}
+              onBlur={() => setIsInputFocused(false)}
+              value={searchInput}
+              onChange={handleSearchChange}
+              onKeyDown={handleKeyDown}
+            />
+          </div>
+        </Paper>
+      </div>
     </div>
   );
 };

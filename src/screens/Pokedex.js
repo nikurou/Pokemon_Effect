@@ -16,17 +16,26 @@ import Color from "../constants/Color";
 */
 
 const useStyles = makeStyles((theme) => ({
-  pokedexBody: {
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "space-evenly",
+  pokedexContainer: {
+    //only used for loading screen, and error messages
+    marginRight: "1em",
+    marginLeft: "1em",
     "& p": {
       color: Color.lightgray,
     },
   },
   container: {
-    width: "80%",
     margin: "auto",
+    width: "90%",
+    marginLeft: "auto",
+    marginRight: "auto",
+  },
+  navigationContainer: {
+    display: "flex",
+    justifyContent: "space-between",
+    flexDirection: "column",
+    marginTop: "1em",
+    marginBottom: "1em",
   },
   navigationButtonContainer: {
     display: "flex",
@@ -37,15 +46,6 @@ const useStyles = makeStyles((theme) => ({
     marginTop: "1.5%",
     marginBotton: "1.5%",
     width: "100%",
-  },
-  searchBar: {
-    display: "flex",
-    justifyContent: "space-between",
-    flexDirection: "column",
-    width: "100%",
-
-    marginTop: "1.5%",
-    marginBottom: "1.5%",
   },
 }));
 
@@ -159,7 +159,11 @@ const Pokedex = () => {
   };
 
   const displayLoading = () => {
-    return <div className={classes.pokedexContainer}>Fetching Results!</div>;
+    return (
+      <div className={classes.pokedexContainer}>
+        <p>Fetching Results!</p>
+      </div>
+    );
   };
 
   // Nav Controls
@@ -183,28 +187,26 @@ const Pokedex = () => {
   }
 
   return (
-    <div className={classes.pokedexContainer}>
-      <div className={classes.container}>
-        <div className={classes.searchBar}>
-          <SearchBar
-            searchInput={searchInput}
-            handleSearchChange={handleSearchChange}
-            handleSearch={handleSearch}
-          ></SearchBar>
-          <div style={{ marginTop: "1%" }}>
-            <NavigationControls />
-          </div>
+    <div className={classes.container}>
+      <div className={classes.navigationContainer}>
+        <SearchBar
+          searchInput={searchInput}
+          handleSearchChange={handleSearchChange}
+          handleSearch={handleSearch}
+        ></SearchBar>
+        <div style={{ marginTop: "1%" }}>
+          <NavigationControls />
         </div>
-
-        {/* Render either loading screen, error, or PokeCards */}
-        {
-          error === true // is error true?
-            ? displayError() // if so displayError
-            : loading === true // otherwiser is loading true?
-            ? displayLoading() // if so display loading
-            : displayPokeCards() // else just show cards
-        }
       </div>
+
+      {/* Render either loading screen, error, or PokeCards */}
+      {
+        error === true // is error true?
+          ? displayError() // if so displayError
+          : loading === true // otherwiser is loading true?
+          ? displayLoading() // if so display loading
+          : displayPokeCards() // else just show cards
+      }
     </div>
   );
 };
