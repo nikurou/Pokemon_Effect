@@ -2,6 +2,9 @@ import React, { useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Color from "../constants/Color";
 
+/*
+ * The Card which displays the Pokemon Name ID Picture and Types
+ */
 const useStyles = makeStyles((theme) => ({
   card: {
     display: "flex",
