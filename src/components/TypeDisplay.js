@@ -23,11 +23,15 @@ const useStyles = makeStyles((theme) => ({
   },
   typeBox: {
     borderRadius: "20%",
-    padding: "0.5rem",
+    paddingLeft: "0.5rem",
+    paddingRight: "0.5rem",
+
     color: Color.primaryColor,
     marginRight: "0.5em",
     marginTop: "0.3em",
+    marginBottom: "auto",
   },
+  //Develop rules for mobile view on chips
 }));
 
 const TypeDisplay = (props) => {
@@ -45,7 +49,7 @@ const TypeDisplay = (props) => {
             return (
               <div
                 className={classes.typeBox}
-                style={{ backgroundColor: Color.dragonType }}
+                style={{ backgroundColor: Color[`${ele}Type`] }}
               >
                 <p>{ele.toUpperCase()}</p>
               </div>
