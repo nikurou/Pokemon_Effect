@@ -62,6 +62,29 @@ const EffectivenessDisplay = (props) => {
   }, [props.types]);
 
   /*
+   * With dual-typed mons, edge cases in which duplicate types appear across seperate relationships.
+   * Check for duplicates when relations are set, and recalculate dupes to their proper spot.
+   * (only 2x,1/2x relationships are considered as 1/4x and 4x edge cases are handled in set_and_merge_relations)
+   */
+  useEffect(() => {
+    if (double_damage_from.length !== 0 && half_damage_from.length !== 0) {
+      const combined = [...double_damage_from, ...half_damage_from];
+      //Find the duplicates
+      let dupes = combined.filter(
+        (ele, index) => combined.indexOf(ele) !== index
+      );
+      console.log("Combined", combined);
+      console.log("Dupes: ", dupes);
+
+      if (dupes.length !== 0) {
+        //Purge the duplicates from both relations
+        setDouble(double_damage_from.filter((ele) => !dupes.includes(ele)));
+        setHalf(half_damage_from.filter((ele) => !dupes.includes(ele)));
+      }
+    }
+  }, [double_damage_from, half_damage_from]);
+
+  /*
    * Read/extract relations from @param and call functions to set relationship hooks accordingly
    *
    * @param: object of arrays of objects {[{}],[{}],[{}],[{}]}
@@ -79,20 +102,21 @@ const EffectivenessDisplay = (props) => {
 
       //Just Merge Now, deal with dupes later
       for (let ele of object1[relationship]) {
+        //for ele of object1[double_damage_from]
         relationArray.push(ele.name);
       }
       for (let ele of object2[relationship]) {
         relationArray.push(ele.name);
       }
 
-      //Find the duplicates now
+      // Find the duplicates now
       let dupesArray = relationArray.filter(
         (ele, index) => relationArray.indexOf(ele) !== index
       );
 
-      //Filter out the dupes
+      // Filter out the dupes completely, they will be set to the 4x, 1/4x or etc.
       relationArray = relationArray.filter(
-        (ele, index) => relationArray.indexOf(ele) === index
+        (ele, index) => !dupesArray.includes(ele)
       );
 
       switch (relationship) {
@@ -113,6 +137,7 @@ const EffectivenessDisplay = (props) => {
     }
   };
 
+  // Given an object of weakness relations, set the respsective elements to their appropriate hooks
   const setRelation = (object) => {
     for (let relationship in object) {
       let relationArray = [];
