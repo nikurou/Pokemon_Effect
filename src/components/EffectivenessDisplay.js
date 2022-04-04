@@ -73,8 +73,6 @@ const EffectivenessDisplay = (props) => {
       let dupes = combined.filter(
         (ele, index) => combined.indexOf(ele) !== index
       );
-      console.log("Combined", combined);
-      console.log("Dupes: ", dupes);
 
       if (dupes.length !== 0) {
         //Purge the duplicates from both relations
