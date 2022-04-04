@@ -64,9 +64,10 @@ const EffectivenessDisplay = (props) => {
   /*
    * With dual-typed mons, edge cases in which duplicate types appear across seperate relationships.
    * Check for duplicates when relations are set, and recalculate dupes to their proper spot.
-   * (only 2x,1/2x relationships are considered as 1/4x and 4x edge cases are handled in set_and_merge_relations)
+   * (only 2x,1/2x, 0x relationships are considered as 1/4x and 4x edge cases are handled in set_and_merge_relations)
    */
   useEffect(() => {
+    // Handle shared duplicates across 1/2x and 2x
     if (double_damage_from.length !== 0 && half_damage_from.length !== 0) {
       const combined = [...double_damage_from, ...half_damage_from];
       //Find the duplicates
@@ -80,7 +81,35 @@ const EffectivenessDisplay = (props) => {
         setHalf(half_damage_from.filter((ele) => !dupes.includes(ele)));
       }
     }
-  }, [double_damage_from, half_damage_from]);
+
+    //Handle duplicates from 0x -> all relations.
+    if (no_damage_from.length !== 0) {
+      //Find duplicates
+      const combined = [
+        ...double_damage_from,
+        ...half_damage_from,
+        ...quad_damage_from,
+        ...fourth_damage_from,
+      ];
+
+      let dupes = combined.filter((ele, index) => no_damage_from.includes(ele));
+
+      if (dupes.length !== 0) {
+        //for each type that's duplicated with 0x
+        for (let ele of dupes) {
+          //filter them out
+          setDouble(double_damage_from.filter((ele) => !dupes.includes(ele)));
+          setHalf(half_damage_from.filter((ele) => !dupes.includes(ele)));
+        }
+      }
+    }
+  }, [
+    double_damage_from,
+    half_damage_from,
+    quad_damage_from,
+    fourth_damage_from,
+    no_damage_from,
+  ]);
 
   /*
    * Read/extract relations from @param and call functions to set relationship hooks accordingly
