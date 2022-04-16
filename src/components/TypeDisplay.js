@@ -22,13 +22,18 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   typeBox: {
-    borderRadius: "20%",
+    borderRadius: "25%",
+    outline: "2px solid white",
+    textShadow: "1px 1px black",
     paddingLeft: "0.5rem",
     paddingRight: "0.5rem",
+    paddingTop: "0.1rem",
+    paddingBottom: "0.1rem",
+    fontWeight: "500",
 
     color: Color.primaryColor,
     marginRight: "0.5em",
-    marginTop: "0.3em",
+    marginTop: "auto",
     marginBottom: "auto",
   },
   //Develop rules for mobile view on chips
